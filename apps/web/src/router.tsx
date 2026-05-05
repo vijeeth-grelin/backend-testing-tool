@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ProjectPortal from './pages/ProjectPortal';
 import WebSocketPage from './pages/WebSocketPage';
+import DocumentationPage from './pages/DocumentationPage';
 import AppShell from './components/layout/AppShell';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
         element: <SettingsPage />,
       },
     ],
+  },
+  {
+    path: '/docs',
+    element: <DocumentationPage />,
   },
   {
     path: '/login',

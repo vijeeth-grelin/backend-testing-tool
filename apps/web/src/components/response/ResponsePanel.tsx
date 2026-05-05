@@ -1,9 +1,14 @@
 import { useResponseStore } from '../../store/responseStore';
-import { Clock, Database, Globe, Loader2, AlertCircle } from 'lucide-react';
+import { useUIStore } from '../../store/uiStore';
+import { Clock, Database, Globe, Loader2, AlertCircle, Copy } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 export default function ResponsePanel() {
   const { response, isLoading, error, activeTab, setActiveTab, clearResponse } = useResponseStore();
+  const { theme } = useUIStore();
+  
+  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const snippetDark = !isDark;
 
   const statusColor = (s: number) =>
     s < 300 ? 'text-green-500 bg-green-500/10 border-green-500/20' :
@@ -114,22 +119,60 @@ export default function ResponsePanel() {
               ))}
             </div>
 
-            <div className="flex-1 overflow-auto p-4 font-mono text-sm custom-scrollbar">
+            <div className="flex-1 flex flex-col min-h-0 bg-muted/5">
               {activeTab === 'body' && (
-                <pre className="bg-muted/10 p-4 rounded-md border overflow-x-auto">
-                  <code className="text-foreground/90 leading-relaxed whitespace-pre">
-                    {response.body}
-                  </code>
-                </pre>
+                <div className="flex-1 flex flex-col min-h-0 p-4">
+                  <div className={cn(
+                    "flex-1 border rounded-2xl overflow-hidden flex flex-col shadow-2xl transition-colors duration-500",
+                    snippetDark ? "bg-[#0d1117] border-white/5 text-white" : "bg-white border-black/5 text-black"
+                  )}>
+                    {/* Snippet Header */}
+                    <div className={cn(
+                      "flex items-center justify-between px-4 py-2 border-b",
+                      snippetDark ? "bg-white/5 border-white/5" : "bg-black/5 border-black/5"
+                    )}>
+                      <div className="flex items-center gap-2">
+                        <span className={cn(
+                          "text-[10px] font-black uppercase tracking-widest opacity-40",
+                          snippetDark ? "text-white" : "text-black"
+                        )}>JSON Response</span>
+                      </div>
+                      <button 
+                        onClick={() => {
+                          navigator.clipboard.writeText(response.body);
+                        }}
+                        className={cn(
+                          "flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all active:scale-95",
+                          snippetDark 
+                            ? "bg-white/10 text-white hover:bg-white/20" 
+                            : "bg-black/10 text-black hover:bg-black/20"
+                        )}
+                      >
+                        <Copy size={12} /> Copy
+                      </button>
+                    </div>
+                    {/* Snippet Content */}
+                    <div className="flex-1 overflow-auto custom-scrollbar p-6 font-mono text-sm">
+                      <pre className={cn(
+                        "leading-relaxed whitespace-pre selection:bg-primary/30",
+                        snippetDark ? "text-blue-100/90" : "text-blue-900/90"
+                      )}>
+                        <code>{response.body}</code>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
               )}
               {activeTab === 'headers' && (
-                <div className="border rounded-md divide-y bg-muted/5">
-                  {Object.entries(response.headers).map(([key, value]) => (
-                    <div key={key} className="grid grid-cols-[200px_1fr] p-3 hover:bg-muted/20">
-                      <span className="font-bold text-primary/80 truncate pr-4">{key}</span>
-                      <span className="text-muted-foreground break-all">{String(value)}</span>
-                    </div>
-                  ))}
+                <div className="p-4">
+                  <div className="border rounded-2xl divide-y bg-card overflow-hidden">
+                    {Object.entries(response.headers).map(([key, value]) => (
+                      <div key={key} className="grid grid-cols-[200px_1fr] p-3 hover:bg-muted/30 transition-colors">
+                        <span className="font-bold text-primary/80 truncate pr-4 text-xs uppercase tracking-tighter">{key}</span>
+                        <span className="text-muted-foreground break-all text-xs font-mono">{String(value)}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
               {activeTab !== 'body' && activeTab !== 'headers' && (

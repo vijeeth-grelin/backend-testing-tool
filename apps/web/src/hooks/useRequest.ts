@@ -11,14 +11,19 @@ export function useRequest() {
   const sendRequest = async () => {
     // Get the absolute latest state from the store to avoid stale closures
     const state = useRequestStore.getState();
-    
+
     if (!state.url) {
       showToast.error('URL is required');
       return;
     }
 
-    setLoading(true);
+    console.log('HOOK: Calling setLoading(true)');
+    useResponseStore.getState().setLoading(true);
     setError(null);
+
+    // Guaranteed delay to ensure UI registers the loading state and re-renders
+    // This prevents "flickering" or missing loading states for fast requests
+    await new Promise(r => setTimeout(r, 100));
 
     const startTime = Date.now();
 
@@ -29,7 +34,7 @@ export function useRequest() {
         'Pragma': 'no-cache',
         'Expires': '0',
       };
-      
+
       state.headers.forEach((h) => {
         if (h.enabled && h.key) headers[h.key] = h.value;
       });
@@ -84,7 +89,7 @@ export function useRequest() {
         timestamp: Date.now(),
       };
 
-      setResponse(apiResponse);
+      useResponseStore.getState().setResponse(apiResponse);
 
       // Add to history
       addEntry({
@@ -106,7 +111,7 @@ export function useRequest() {
       }
     } catch (err: any) {
       let errorMsg = 'Request failed';
-      
+
       if (err.code === 'ECONNABORTED') {
         errorMsg = 'Request timed out (30s)';
       } else if (err.message === 'Network Error') {
@@ -118,7 +123,8 @@ export function useRequest() {
       setError(errorMsg);
       showToast.error('Request failed', errorMsg);
     } finally {
-      setLoading(false);
+      console.log('HOOK: Calling setLoading(false)');
+      useResponseStore.getState().setLoading(false);
     }
   };
 

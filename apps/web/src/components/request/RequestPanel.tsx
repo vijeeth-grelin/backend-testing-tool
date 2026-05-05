@@ -9,7 +9,9 @@ import { useResponseStore } from '../../store/responseStore';
 export default function RequestPanel() {
   const { url, setUrl, method, setMethod } = useRequestStore();
   const { sendRequest } = useRequest();
-  const { isLoading } = useResponseStore();
+  const isLoading = useResponseStore((state) => state.isLoading);
+
+  console.log('[RequestPanel] Render, isLoading:', isLoading);
 
   return (
     <div className="p-4 flex flex-col gap-4">

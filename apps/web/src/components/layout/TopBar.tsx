@@ -1,11 +1,12 @@
-import { Layers, Moon, Sun, Database, Zap, Terminal, Shield, LogOut } from 'lucide-react';
+import { Layers, Moon, Sun, Database, Zap, Terminal, Shield, LogOut, HelpCircle } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 import { useAuthStore } from '../../store/authStore';
+import UserGuide from '../docs/UserGuide';
 
 export default function TopBar() {
-  const { theme, setTheme } = useUIStore();
+  const { theme, setTheme, openModal } = useUIStore();
   const { user, token, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -62,6 +63,14 @@ export default function TopBar() {
       </div>
 
       <div className="flex items-center gap-4">
+        <button
+          onClick={() => navigate('/docs')}
+          className="p-2.5 hover:bg-muted rounded-2xl transition-all text-muted-foreground hover:text-primary border border-transparent hover:border-border"
+          title="Platform Documentation"
+        >
+          <HelpCircle size={20} />
+        </button>
+
         <button
           onClick={toggleTheme}
           className="p-2.5 hover:bg-muted rounded-2xl transition-all text-muted-foreground hover:text-foreground border border-transparent hover:border-border"

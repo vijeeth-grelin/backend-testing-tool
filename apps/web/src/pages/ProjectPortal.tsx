@@ -150,6 +150,13 @@ export default function ProjectPortal() {
           </div>
           
           <div className="flex items-center gap-4">
+             <button 
+               onClick={() => navigate('/docs')}
+               className="flex items-center gap-2 px-4 py-2 hover:bg-primary/10 text-primary rounded-xl transition-all font-black text-[10px] uppercase tracking-widest border border-primary/20"
+             >
+               <FileJson size={14} /> Platform Guide
+             </button>
+
              <div className="relative w-80">
                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
                <input 

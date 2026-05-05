@@ -20,9 +20,23 @@ export const useResponseStore = create<ResponseState>((set) => ({
   error: null,
   activeTab: 'body',
 
-  setResponse: (response) => set({ response, isLoading: false, error: null }),
-  setLoading: (isLoading) => set({ isLoading }),
-  setError: (error) => set({ error, isLoading: false, response: null }),
+  setResponse: (response) => {
+    console.log('STORE: setResponse called');
+    set({ response, isLoading: false, error: null });
+  },
+  setLoading: (loading) => {
+    console.log('STORE: setLoading called with:', loading);
+    set({ isLoading: loading });
+  },
+  setError: (error) => {
+    console.log('STORE: setError called with:', error);
+    // Only reset loading if we are actually setting an error (not clearing it)
+    set((state) => ({ 
+      error, 
+      isLoading: error ? false : state.isLoading,
+      response: error ? null : state.response 
+    }));
+  },
   setActiveTab: (activeTab) => set({ activeTab }),
   clearResponse: () => set({ response: null, error: null, isLoading: false }),
 }));
