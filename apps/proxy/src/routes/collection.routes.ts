@@ -3,8 +3,51 @@ import prisma from '@/lib/db';
 import { authenticate, requireAdmin, AuthRequest } from '@/middleware/auth';
 import { validate } from '@/middleware/validate';
 import { createCollectionSchema, getCollectionsSchema, deleteCollectionSchema } from '@/lib/schemas';
+import multer from 'multer';
 
 const router = Router();
+const upload = multer();
+
+// Admin: Upload Collection JSON file
+router.post('/admin/projects/:projectId/collections/upload', authenticate, requireAdmin, upload.single('file'), async (req: AuthRequest, res) => {
+  const { projectId } = req.params;
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  try {
+    const rawData = file.buffer.toString('utf-8');
+    const jsonData = JSON.parse(rawData);
+    
+    // Auto-detect name from file or content
+    const name = jsonData.info?.name || jsonData.name || file.originalname.replace('.json', '');
+    
+    const collection = await prisma.collection.upsert({
+      where: {
+        id: (await prisma.collection.findFirst({ where: { projectId, name } }))?.id || 'new-id'
+      },
+      update: {
+        data: rawData,
+        fileName: file.originalname,
+      },
+      create: {
+        name,
+        description: jsonData.info?.description || '',
+        type: 'COLLECTION',
+        data: rawData,
+        fileName: file.originalname,
+        projectId,
+        uploadedBy: req.user!.userId,
+      }
+    });
+
+    res.json(collection);
+  } catch (error: any) {
+    res.status(400).json({ message: 'Invalid JSON file', error: error.message });
+  }
+});
 
 // Admin: Create/Publish collection
 router.post('/admin/projects/:projectId/collections', authenticate, requireAdmin, validate(createCollectionSchema), async (req: AuthRequest, res) => {

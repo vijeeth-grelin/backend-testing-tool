@@ -7,6 +7,8 @@ export interface KeyValuePair {
   key: string;
   value: string;
   enabled: boolean;
+  type?: 'text' | 'file';
+  file?: File | null;
   description?: string;
 }
 

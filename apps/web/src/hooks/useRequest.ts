@@ -60,6 +60,20 @@ export function useRequest() {
           }
         } else if (state.body.type === 'raw') {
           data = state.body.raw;
+        } else if (state.body.type === 'form-data' && state.body.formData) {
+          const formData = new FormData();
+          state.body.formData.forEach(field => {
+            if (field.enabled && field.key) {
+              if (field.type === 'file' && field.file) {
+                formData.append(field.key, field.file);
+              } else {
+                formData.append(field.key, field.value);
+              }
+            }
+          });
+          data = formData;
+          // Axios will automatically set the correct Content-Type for FormData
+          delete headers['Content-Type'];
         }
       }
 

@@ -327,7 +327,7 @@ export default function AdminDashboard() {
             </div>
           ) : (
             <div className="flex-1 flex overflow-hidden">
-               <div className="w-72 border-r bg-card/20 flex flex-col">
+                <div className="w-72 border-r bg-card/20 flex flex-col">
                   <div className="p-6 border-b flex items-center justify-between">
                     <h3 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Folder</h3>
                     <button 
@@ -472,24 +472,41 @@ export default function AdminDashboard() {
                                 <KeyValueTable data={requests[activeReqIndex].headers} onChange={(h) => updateActiveRequest({ headers: h })} />
                               )}
                               {activeTab === 'body' && (
-                                <div className="space-y-4 h-full flex flex-col">
-                                   <select 
-                                      value={requests[activeReqIndex].body.type}
-                                      onChange={(e) => updateActiveRequest({ body: { ...requests[activeReqIndex].body, type: e.target.value as BodyType } })}
-                                      className="w-40 bg-muted/30 border rounded-lg px-3 py-2 text-[10px] font-bold uppercase outline-none"
-                                   >
-                                      <option value="none">No Body</option>
-                                      <option value="json">JSON</option>
-                                      <option value="raw">Raw Text</option>
-                                   </select>
-                                   <textarea 
-                                      value={requests[activeReqIndex].body.raw}
-                                      onChange={(e) => updateActiveRequest({ body: { ...requests[activeReqIndex].body, raw: e.target.value } })}
-                                      className="flex-1 w-full bg-card/50 border rounded-[2rem] p-6 text-xs font-mono outline-none resize-none min-h-[300px] focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all custom-scrollbar shadow-inner"
-                                      placeholder='{ "key": "value" }'
-                                   />
-                                </div>
-                              )}
+                                 <div className="space-y-4 h-full flex flex-col">
+                                    <select 
+                                       value={requests[activeReqIndex].body.type}
+                                       onChange={(e) => {
+                                         const newType = e.target.value as any;
+                                         const updates: any = { type: newType };
+                                         if (newType === 'form-data' && !requests[activeReqIndex].body.formData) {
+                                           updates.formData = [{ id: crypto.randomUUID(), key: '', value: '', enabled: true, type: 'text' }];
+                                         }
+                                         updateActiveRequest({ body: { ...requests[activeReqIndex].body, ...updates } });
+                                       }}
+                                       className="w-40 bg-muted/30 border rounded-lg px-3 py-2 text-[10px] font-bold uppercase outline-none"
+                                    >
+                                       <option value="none">No Body</option>
+                                       <option value="json">JSON</option>
+                                       <option value="raw">Raw Text</option>
+                                       <option value="form-data">Form Data</option>
+                                    </select>
+                                    
+                                    {requests[activeReqIndex].body.type === 'form-data' ? (
+                                      <KeyValueTable 
+                                        isFormData 
+                                        data={requests[activeReqIndex].body.formData || []} 
+                                        onChange={(fd) => updateActiveRequest({ body: { ...requests[activeReqIndex].body, formData: fd } })} 
+                                      />
+                                    ) : (
+                                      <textarea 
+                                        value={requests[activeReqIndex].body.raw}
+                                        onChange={(e) => updateActiveRequest({ body: { ...requests[activeReqIndex].body, raw: e.target.value } })}
+                                        className="flex-1 w-full bg-card/50 border rounded-[2rem] p-6 text-xs font-mono outline-none resize-none min-h-[300px] focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all custom-scrollbar shadow-inner"
+                                        placeholder={requests[activeReqIndex].body.type === 'json' ? '{ "key": "value" }' : 'Enter raw body content...'}
+                                      />
+                                    )}
+                                 </div>
+                               )}
                               {activeTab === 'auth' && (
                                 <div className="space-y-6 max-w-xl">
                                    <div className="space-y-2">
@@ -535,8 +552,16 @@ export default function AdminDashboard() {
   );
 }
 
-function KeyValueTable({ data, onChange }: { data: any[], onChange: (data: any[]) => void }) {
-  const addRow = () => onChange([...data, { key: '', value: '', enabled: true }]);
+function KeyValueTable({ 
+  data, 
+  onChange, 
+  isFormData = false 
+}: { 
+  data: any[], 
+  onChange: (data: any[]) => void,
+  isFormData?: boolean
+}) {
+  const addRow = () => onChange([...data, { id: crypto.randomUUID(), key: '', value: '', enabled: true, type: 'text' }]);
   const removeRow = (index: number) => onChange(data.filter((_, i) => i !== index));
   const updateRow = (index: number, updates: any) => {
     const newData = [...data];
@@ -551,6 +576,7 @@ function KeyValueTable({ data, onChange }: { data: any[], onChange: (data: any[]
           <thead className="bg-muted/50 border-b">
             <tr>
               <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground w-12 text-center">Use</th>
+              {isFormData && <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground w-24">Type</th>}
               <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground">Key</th>
               <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground">Value</th>
               <th className="px-4 py-3 w-12"></th>
@@ -562,11 +588,27 @@ function KeyValueTable({ data, onChange }: { data: any[], onChange: (data: any[]
                 <td className="px-4 py-2 text-center">
                   <input type="checkbox" checked={row.enabled} onChange={(e) => updateRow(i, { enabled: e.target.checked })} className="rounded border-border text-primary focus:ring-primary h-3.5 w-3.5" />
                 </td>
+                {isFormData && (
+                  <td className="px-2 py-2">
+                    <select
+                      value={row.type || 'text'}
+                      onChange={(e) => updateRow(i, { type: e.target.value, value: '' })}
+                      className="bg-transparent text-[10px] font-bold uppercase outline-none w-full"
+                    >
+                      <option value="text">Text</option>
+                      <option value="file">File</option>
+                    </select>
+                  </td>
+                )}
                 <td className="px-2 py-2">
                   <input value={row.key} onChange={(e) => updateRow(i, { key: e.target.value })} className="w-full bg-transparent px-2 py-1 text-xs outline-none" placeholder="Key" />
                 </td>
                 <td className="px-2 py-2">
-                  <input value={row.value} onChange={(e) => updateRow(i, { value: e.target.value })} className="w-full bg-transparent px-2 py-1 text-xs outline-none" placeholder="Value" />
+                  {row.type === 'file' ? (
+                    <span className="text-[10px] text-muted-foreground italic px-2">File Input Placeholder</span>
+                  ) : (
+                    <input value={row.value} onChange={(e) => updateRow(i, { value: e.target.value })} className="w-full bg-transparent px-2 py-1 text-xs outline-none" placeholder="Value" />
+                  )}
                 </td>
                 <td className="px-4 py-2 text-right">
                   <button onClick={() => removeRow(i)} className="text-muted-foreground hover:text-destructive transition-colors"><X size={14} /></button>
