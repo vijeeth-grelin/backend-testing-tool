@@ -5,6 +5,11 @@ import http from 'http';
 import { Server, Socket } from 'socket.io';
 import { io as ClientIO, Socket as ClientSocket } from 'socket.io-client';
 import prisma from './lib/db';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Load .env from project root
+dotenv.config({ path: path.join(__dirname, '../../../.env') });
 import { hashPassword, comparePassword, generateToken } from './lib/auth';
 import { authenticate, requireAdmin, AuthRequest } from './middleware/auth';
 import { validate } from './middleware/validate';
