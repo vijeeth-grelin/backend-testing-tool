@@ -12,25 +12,36 @@ router.post('/admin/projects/:projectId/collections', authenticate, requireAdmin
   const { name, description, type, data, fileName } = req.body;
 
   try {
+    // Check if a collection with this name already exists in the project
     const existing = await prisma.collection.findFirst({
       where: { projectId, name }
     });
 
-    if (existing) {
-      return res.status(409).json({ message: `Version "${name}" already exists in this project.` });
-    }
+    let collection;
 
-    const collection = await prisma.collection.create({
-      data: {
-        name,
-        description,
-        type, 
-        data: typeof data === 'string' ? data : JSON.stringify(data),
-        fileName,
-        projectId,
-        uploadedBy: req.user!.userId,
-      },
-    });
+    if (existing) {
+      // Update existing version
+      collection = await prisma.collection.update({
+        where: { id: existing.id },
+        data: {
+          data: typeof data === 'string' ? data : JSON.stringify(data),
+          fileName,
+        },
+      });
+    } else {
+      // Create new version
+      collection = await prisma.collection.create({
+        data: {
+          name,
+          description,
+          type, 
+          data: typeof data === 'string' ? data : JSON.stringify(data),
+          fileName,
+          projectId,
+          uploadedBy: req.user!.userId,
+        },
+      });
+    }
     res.json(collection);
   } catch (error: any) {
     res.status(500).json({ message: 'Failed to upload collection', error: error.message });

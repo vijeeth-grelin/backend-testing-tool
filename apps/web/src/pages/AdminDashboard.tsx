@@ -19,6 +19,7 @@ export default function AdminDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [collections, setCollections] = useState<PublishedCollection[]>([]);
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,6 +71,7 @@ export default function AdminDashboard() {
       setCollName('');
       setRequests([]);
       setActiveReqIndex(null);
+      setSelectedCollectionId(null);
     }
   }, [selectedProjectId]);
 
@@ -107,6 +109,7 @@ export default function AdminDashboard() {
     setCollName('');
     setRequests([]);
     setActiveReqIndex(null);
+    setSelectedCollectionId(null);
     showToast.success('New Version Started', 'The builder has been cleared.');
   };
 
@@ -178,6 +181,7 @@ export default function AdminDashboard() {
       setCollName(collection.name);
       setRequests(data.items || []);
       setActiveReqIndex(data.items?.length > 0 ? 0 : null);
+      setSelectedCollectionId(collection.id);
       showToast.success('Version Loaded', 'You can now edit and re-publish this version.');
     } catch (e) {
       showToast.error('Failed to load version data');
@@ -339,7 +343,12 @@ export default function AdminDashboard() {
                       <div 
                         key={c.id} 
                         onClick={() => handleLoadCollection(c)}
-                        className="p-4 bg-card border rounded-2xl flex items-center justify-between group hover:border-primary/50 transition-all cursor-pointer hover:shadow-md"
+                        className={cn(
+                          "p-4 border rounded-2xl flex items-center justify-between group transition-all cursor-pointer hover:shadow-md",
+                          selectedCollectionId === c.id 
+                            ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20" 
+                            : "bg-card hover:border-primary/50"
+                        )}
                       >
                         <p className="text-xs font-black">{c.name}</p>
                         <button 
