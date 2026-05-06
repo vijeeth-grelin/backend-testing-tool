@@ -1,5 +1,5 @@
-import RequestPanel from '../components/request/RequestPanel';
-import ResponsePanel from '../components/response/ResponsePanel';
+import RequestPanel from '@/components/request/RequestPanel';
+import ResponsePanel from '@/components/response/ResponsePanel';
 import { Panel, Group, Separator } from 'react-resizable-panels';
 
 export default function RequestPage() {

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { HistoryEntry } from '../types/history';
+import type { HistoryEntry } from '@/types/history';
 
 interface HistoryState {
   entries: HistoryEntry[];

@@ -1,5 +1,5 @@
-import prisma from './lib/db';
-import { hashPassword } from './lib/auth';
+import prisma from '@/lib/db';
+import { hashPassword } from '@/lib/auth';
 
 async function main() {
   const adminEmail = 'admin@grelinhealth.ai';

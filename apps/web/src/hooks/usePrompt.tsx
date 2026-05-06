@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useUIStore } from '../store/uiStore';
+import { useUIStore } from '@/store/uiStore';
 
 export function usePrompt() {
   const { openModal, closeModal } = useUIStore();

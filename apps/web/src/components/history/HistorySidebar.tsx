@@ -1,10 +1,10 @@
-import { useHistoryStore } from '../../store/historyStore';
+import { useHistoryStore } from '@/store/historyStore';
 import { Trash2, Clock } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import { METHOD_COLORS } from '../request/MethodSelector';
-import { useRequestStore } from '../../store/requestStore';
-import { useConfirm } from '../../hooks/useConfirm';
-import { showToast } from '../../utils/toast';
+import { cn } from '@/utils/cn';
+import { METHOD_COLORS } from '@/components/request/MethodSelector';
+import { useRequestStore } from '@/store/requestStore';
+import { useConfirm } from '@/hooks/useConfirm';
+import { showToast } from '@/utils/toast';
 import dayjs from 'dayjs';
 
 export default function HistorySidebar() {

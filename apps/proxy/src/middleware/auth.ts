@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyToken, TokenPayload } from '../lib/auth';
+import { verifyToken, TokenPayload } from '@/lib/auth';
 
 export interface AuthRequest extends Request {
   user?: TokenPayload;

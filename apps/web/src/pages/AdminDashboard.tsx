@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useAuthStore } from '../store/authStore';
-import { showToast } from '../utils/toast';
+import api from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
+import { showToast } from '@/utils/toast';
 import { 
   Shield, Plus, FileJson, Globe, Trash2, Database, ExternalLink, 
   Loader2, FolderPlus, Folder, Clock, Tag, LayoutDashboard, Settings2,
   X, Save, ChevronRight, ListFilter, ShieldCheck, Key, FileCode, LogOut
 } from 'lucide-react';
-import { cn } from '../utils/cn';
-import { projectSchema, collectionSchema, handleZodError } from '../utils/validation';
-import { safeInput } from '../utils/security';
+import { cn } from '@/utils/cn';
+import { projectSchema, collectionSchema, handleZodError } from '@/utils/validation';
+import { safeInput } from '@/utils/security';
 import { z } from 'zod';
 
-import type { Project, Collection, RequestNode, PublishedCollection } from '../types/collection';
-import type { KeyValuePair, HttpMethod, BodyType } from '../types/request';
+import type { Project, Collection, RequestNode, PublishedCollection } from '@/types/collection';
+import type { KeyValuePair, HttpMethod, BodyType } from '@/types/request';
 
 export default function AdminDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:3001/api/projects');
+      const res = await api.get('/api/projects');
       setProjects(res.data);
       if (res.data.length > 0 && !selectedProjectId) {
         setSelectedProjectId(res.data[0].id);
@@ -54,7 +54,7 @@ export default function AdminDashboard() {
 
   const fetchCollections = async (projId: string) => {
     try {
-      const res = await axios.get(`http://127.0.0.1:3001/api/projects/${projId}/collections`);
+      const res = await api.get(`/api/projects/${projId}/collections`);
       setCollections(res.data);
     } catch (e) {
       showToast.error('Failed to load collections');
@@ -87,14 +87,10 @@ export default function AdminDashboard() {
       
       setIsSubmitting(true);
       if (editingProjectId) {
-        await axios.put(`http://127.0.0.1:3001/api/projects/${editingProjectId}`, data, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.put(`/api/projects/${editingProjectId}`, data);
         showToast.success('Project Updated');
       } else {
-        await axios.post('http://127.0.0.1:3001/api/projects', data, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.post('/api/projects', data);
         showToast.success('Project Created');
       }
       setProjName(''); setProjDesc(''); setProjBaseUrl(''); 
@@ -125,9 +121,7 @@ export default function AdminDashboard() {
   const handleDeleteProject = async (id: string) => {
     if (!confirm('Delete this project and all its collections?')) return;
     try {
-      await axios.delete(`http://127.0.0.1:3001/api/projects/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/api/projects/${id}`);
       showToast.success('Project Deleted');
       if (selectedProjectId === id) setSelectedProjectId(null);
       fetchData();
@@ -171,9 +165,7 @@ export default function AdminDashboard() {
   const handleDeleteCollection = async (id: string) => {
     if (!confirm('Delete this version?')) return;
     try {
-      await axios.delete(`http://127.0.0.1:3001/api/admin/collections/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/api/admin/collections/${id}`);
       showToast.success('Version Deleted');
       if (selectedProjectId) fetchCollections(selectedProjectId);
       fetchData();
@@ -212,14 +204,12 @@ export default function AdminDashboard() {
 
       setIsSubmitting(true);
 
-      await axios.post(`http://127.0.0.1:3001/api/admin/projects/${selectedProjectId}/collections`, {
+      await api.post(`/api/admin/projects/${selectedProjectId}/collections`, {
         name: collName,
         description: '',
         type: 'COLLECTION',
         data: collectionData,
         fileName: `${collName.toLowerCase().replace(/\s+/g, '-')}.json`
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       showToast.success('Version Published');

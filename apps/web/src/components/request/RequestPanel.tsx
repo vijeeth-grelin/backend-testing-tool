@@ -1,10 +1,10 @@
 import { Send } from 'lucide-react';
-import MethodSelector from './MethodSelector';
-import UrlBar from './UrlBar';
-import RequestTabs from './RequestTabs';
-import { useRequestStore } from '../../store/requestStore';
-import { useRequest } from '../../hooks/useRequest';
-import { useResponseStore } from '../../store/responseStore';
+import MethodSelector from '@/components/request/MethodSelector';
+import UrlBar from '@/components/request/UrlBar';
+import RequestTabs from '@/components/request/RequestTabs';
+import { useRequestStore } from '@/store/requestStore';
+import { useRequest } from '@/hooks/useRequest';
+import { useResponseStore } from '@/store/responseStore';
 
 export default function RequestPanel() {
   const { url, setUrl, method, setMethod } = useRequestStore();

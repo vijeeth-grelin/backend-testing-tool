@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useRequestStore } from '../../store/requestStore';
-import { cn } from '../../utils/cn';
-import KeyValueTable from './KeyValueTable';
-import BodyEditor from './BodyEditor';
+import { useRequestStore } from '@/store/requestStore';
+import { cn } from '@/utils/cn';
+import KeyValueTable from '@/components/request/KeyValueTable';
+import BodyEditor from '@/components/request/BodyEditor';
 import { FileJson, ListFilter, Shield } from 'lucide-react';
-import AuthManager from './AuthManager';
+import AuthManager from '@/components/request/AuthManager';
 
 export default function RequestTabs() {
   const [activeTab, setActiveTab] = useState('params');

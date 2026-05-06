@@ -1,7 +1,7 @@
-import { useResponseStore } from '../../store/responseStore';
-import { useUIStore } from '../../store/uiStore';
+import { useResponseStore } from '@/store/responseStore';
+import { useUIStore } from '@/store/uiStore';
 import { Clock, Database, Globe, Loader2, AlertCircle, Copy } from 'lucide-react';
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export default function ResponsePanel() {
   const { response, isLoading, error, activeTab, setActiveTab, clearResponse } = useResponseStore();

@@ -5,11 +5,12 @@ import {
   ChevronRight, LayoutGrid, List, Filter, Play
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { cn } from '../utils/cn';
-import { useCollectionStore } from '../store/collectionStore';
-import { showToast } from '../utils/toast';
+import { cn } from '@/utils/cn';
+import { useCollectionStore } from '@/store/collectionStore';
+import { showToast } from '@/utils/toast';
+import api from '@/lib/api';
 
-import type { Project, PublishedCollection } from '../types/collection';
+import type { Project, PublishedCollection } from '@/types/collection';
 
 export default function ProjectPortal() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -26,10 +27,10 @@ export default function ProjectPortal() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get('http://127.0.0.1:3001/api/projects');
+        const res = await api.get('/api/projects');
         setProjects(res.data);
       } catch (e) {
-        console.error('Failed to load projects');
+        // Error toast is already handled by interceptor
       } finally {
         setIsLoading(false);
       }
@@ -40,7 +41,7 @@ export default function ProjectPortal() {
   const handleSelectProject = async (project: Project) => {
     setSelectedProject(project);
     try {
-      const res = await axios.get(`http://127.0.0.1:3001/api/projects/${project.id}/collections`);
+      const res = await api.get(`/api/projects/${project.id}/collections`);
       setCollections(res.data);
     } catch (e) {
       console.error('Failed to load collections');

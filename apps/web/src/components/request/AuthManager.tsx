@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useRequestStore } from '../../store/requestStore';
+import { useRequestStore } from '@/store/requestStore';
 import { Key, Shield, User, Lock, AlertCircle } from 'lucide-react';
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export default function AuthManager() {
   const { auth, setAuth } = useRequestStore();

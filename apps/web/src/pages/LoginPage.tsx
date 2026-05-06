@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import { useAuthStore } from '../store/authStore';
-import { showToast } from '../utils/toast';
+import api from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
+import { showToast } from '@/utils/toast';
 import { Shield, Lock, Mail, Loader2, ArrowRight } from 'lucide-react';
-import { loginSchema, handleZodError } from '../utils/validation';
+import { loginSchema, handleZodError } from '@/utils/validation';
 import { z } from 'zod';
 
 export default function LoginPage() {
@@ -24,7 +24,7 @@ export default function LoginPage() {
       loginSchema.parse({ email, password });
       
       setIsLoading(true);
-      const response = await axios.post('http://127.0.0.1:3001/api/auth/login', {
+      const response = await api.post('/api/auth/login', {
         email,
         password,
       });

@@ -1,9 +1,9 @@
 import { Layers, Moon, Sun, Database, Zap, Terminal, Shield, LogOut, HelpCircle } from 'lucide-react';
-import { useUIStore } from '../../store/uiStore';
+import { useUIStore } from '@/store/uiStore';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { cn } from '../../utils/cn';
-import { useAuthStore } from '../../store/authStore';
-import UserGuide from '../docs/UserGuide';
+import { cn } from '@/utils/cn';
+import { useAuthStore } from '@/store/authStore';
+import UserGuide from '@/components/docs/UserGuide';
 
 export default function TopBar() {
   const { theme, setTheme, openModal } = useUIStore();

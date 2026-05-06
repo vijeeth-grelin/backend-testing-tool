@@ -2,8 +2,8 @@ import {
   Book, CheckCircle2, Shield, Zap, Terminal, Database, Play, 
   ArrowRight, Sparkles, Code2, Globe, Cpu, Layout, Layers, HelpCircle
 } from 'lucide-react';
-import { cn } from '../utils/cn';
-import UserGuide from '../components/docs/UserGuide';
+import { cn } from '@/utils/cn';
+import UserGuide from '@/components/docs/UserGuide';
 import { useNavigate } from 'react-router-dom';
 
 export default function DocumentationPage() {

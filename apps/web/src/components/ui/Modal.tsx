@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { useUIStore } from '../../store/uiStore';
+import { useUIStore } from '@/store/uiStore';
 
 export default function GlobalModal() {
   const { modal, closeModal } = useUIStore();

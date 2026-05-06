@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ApiResponse } from '../types/request';
+import type { ApiResponse } from '@/types/request';
 
 interface ResponseState {
   response: ApiResponse | null;

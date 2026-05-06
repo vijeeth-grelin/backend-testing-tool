@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Collection, RequestNode, FolderNode, CollectionItem } from '../types/collection';
+import type { Collection, RequestNode, FolderNode, CollectionItem } from '@/types/collection';
 
 interface CollectionState {
   collections: Collection[];

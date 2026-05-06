@@ -1,5 +1,5 @@
 import { Plus, Trash2, CheckSquare, Square } from 'lucide-react';
-import type { KeyValuePair } from '../../types/request';
+import type { KeyValuePair } from '@/types/request';
 
 interface Props {
   data: KeyValuePair[];

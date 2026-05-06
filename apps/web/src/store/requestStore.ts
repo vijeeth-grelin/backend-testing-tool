@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import type { HttpMethod, KeyValuePair, RequestBody, ApiRequest } from '../types/request';
-import type { RequestNode } from '../types/collection';
+import type { HttpMethod, KeyValuePair, RequestBody, ApiRequest } from '@/types/request';
+import type { RequestNode } from '@/types/collection';
 
 interface RequestState {
   method: HttpMethod;

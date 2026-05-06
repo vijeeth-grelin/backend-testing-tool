@@ -1,13 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
-import RequestPage from './pages/RequestPage';
-import SettingsPage from './pages/SettingsPage';
-import LoginPage from './pages/LoginPage';
-import AdminDashboard from './pages/AdminDashboard';
-import ProjectPortal from './pages/ProjectPortal';
-import WebSocketPage from './pages/WebSocketPage';
-import DocumentationPage from './pages/DocumentationPage';
-import AppShell from './components/layout/AppShell';
-import ProtectedRoute from './components/auth/ProtectedRoute';
+import RequestPage from '@/pages/RequestPage';
+import SettingsPage from '@/pages/SettingsPage';
+import LoginPage from '@/pages/LoginPage';
+import AdminDashboard from '@/pages/AdminDashboard';
+import ProjectPortal from '@/pages/ProjectPortal';
+import WebSocketPage from '@/pages/WebSocketPage';
+import DocumentationPage from '@/pages/DocumentationPage';
+import AppShell from '@/components/layout/AppShell';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export const router = createBrowserRouter([
   {

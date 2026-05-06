@@ -1,6 +1,6 @@
-import { useResponseStore } from '../../store/responseStore';
-import type { HttpMethod } from '../../types/request';
-import { cn } from '../../utils/cn';
+import { useResponseStore } from '@/store/responseStore';
+import type { HttpMethod } from '@/types/request';
+import { cn } from '@/utils/cn';
 
 interface Props {
   value: HttpMethod;

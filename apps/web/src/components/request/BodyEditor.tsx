@@ -1,5 +1,5 @@
-import { useRequestStore } from '../../store/requestStore';
-import { cn } from '../../utils/cn';
+import { useRequestStore } from '@/store/requestStore';
+import { cn } from '@/utils/cn';
 
 export default function BodyEditor() {
   const { body, setBody } = useRequestStore();

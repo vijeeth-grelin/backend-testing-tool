@@ -1,4 +1,4 @@
-import type { HttpMethod, KeyValuePair, RequestBody } from './request';
+import type { HttpMethod, KeyValuePair, RequestBody } from '@/types/request';
 
 export interface Project {
   id: string;

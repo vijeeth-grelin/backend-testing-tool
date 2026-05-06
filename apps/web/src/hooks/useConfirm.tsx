@@ -1,4 +1,4 @@
-import { useUIStore } from '../store/uiStore';
+import { useUIStore } from '@/store/uiStore';
 
 export function useConfirm() {
   const { openModal, closeModal } = useUIStore();

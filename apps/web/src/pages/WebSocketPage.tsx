@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { Send, Zap, Trash2, Power, PowerOff, Activity, MessageSquare } from 'lucide-react';
-import { cn } from '../utils/cn';
-import { showToast } from '../utils/toast';
+import { cn } from '@/utils/cn';
+import { showToast } from '@/utils/toast';
 
 interface Message {
   id: string;

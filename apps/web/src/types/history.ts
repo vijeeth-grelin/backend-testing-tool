@@ -1,4 +1,4 @@
-import type { HttpMethod, ApiRequest, ApiResponse } from './request';
+import type { HttpMethod, ApiRequest, ApiResponse } from '@/types/request';
 
 export interface HistoryEntry {
   id: string;

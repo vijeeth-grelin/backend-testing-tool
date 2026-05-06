@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { useRequestStore } from '../store/requestStore';
-import { useResponseStore } from '../store/responseStore';
-import { useHistoryStore } from '../store/historyStore';
-import { showToast } from '../utils/toast';
+import { useRequestStore } from '@/store/requestStore';
+import { useResponseStore } from '@/store/responseStore';
+import { useHistoryStore } from '@/store/historyStore';
+import { showToast } from '@/utils/toast';
+import { PROXY_URL } from '@/config/api';
 
 export function useRequest() {
   const { setResponse, setLoading, setError } = useResponseStore();
@@ -64,7 +65,7 @@ export function useRequest() {
 
       const response = await axios({
         method: state.method,
-        url: 'http://127.0.0.1:3001/proxy',
+        url: PROXY_URL,
         headers,
         params,
         data,

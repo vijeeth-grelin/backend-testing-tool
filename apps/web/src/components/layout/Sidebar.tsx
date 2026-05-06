@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Database, History, Settings, Globe, Plus, Search } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import CollectionSidebar from '../collections/CollectionSidebar';
-import HistorySidebar from '../history/HistorySidebar';
+import { cn } from '@/utils/cn';
+import CollectionSidebar from '@/components/collections/CollectionSidebar';
+import HistorySidebar from '@/components/history/HistorySidebar';
 
 type Tab = 'collections' | 'history' | 'environments';
 

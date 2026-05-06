@@ -1,4 +1,4 @@
-import { useResponseStore } from "../../store/responseStore";
+import { useResponseStore } from "@/store/responseStore";
 
 interface Props {
   value: string;

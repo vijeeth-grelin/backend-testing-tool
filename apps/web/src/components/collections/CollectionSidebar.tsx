@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useCollectionStore } from '../../store/collectionStore';
-import type { Collection, CollectionItem, FolderNode, RequestNode } from '../../types/collection';
+import { useCollectionStore } from '@/store/collectionStore';
+import type { Collection, CollectionItem, FolderNode, RequestNode } from '@/types/collection';
 import { ChevronRight, Folder, Plus, FolderPlus, Trash2, ShieldCheck, Globe, Copy, Info, Database } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import { METHOD_COLORS } from '../request/MethodSelector';
-import { useRequestStore } from '../../store/requestStore';
-import { useConfirm } from '../../hooks/useConfirm';
-import { usePrompt } from '../../hooks/usePrompt';
-import { showToast } from '../../utils/toast';
-import { safeInput } from '../../utils/security';
-import { nameSchema, handleZodError } from '../../utils/validation';
+import { cn } from '@/utils/cn';
+import { METHOD_COLORS } from '@/components/request/MethodSelector';
+import { useRequestStore } from '@/store/requestStore';
+import { useConfirm } from '@/hooks/useConfirm';
+import { usePrompt } from '@/hooks/usePrompt';
+import { showToast } from '@/utils/toast';
+import { safeInput } from '@/utils/security';
+import { nameSchema, handleZodError } from '@/utils/validation';
 import { z } from 'zod';
 
 export default function CollectionSidebar() {

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
+import { router } from '@/router';
 import { Toaster } from 'sonner';
-import GlobalModal from './components/ui/Modal';
-import { useUIStore } from './store/uiStore';
+import GlobalModal from '@/components/ui/Modal';
+import { useUIStore } from '@/store/uiStore';
 
 function App() {
   const theme = useUIStore((state) => state.theme);
